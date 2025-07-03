@@ -13,10 +13,11 @@ const transporter = nodeMailer.createTransport({
 const sendOtp = async(req,res)=>{
     const mailOptions = {
         from:process.env.EMAIL_USER,
-        to:email,
+        to:req.email,
         subject:"OTP for your Portfolio regiteration",
-        html: `<h3>Your OTP is: <b>${otp}</b></h3><p>Valid for 5 minutes</p>`,
+        html: `<h3>Your OTP is: <b>${req.otp}</b></h3><p>Valid for 5 minutes</p>`,
     }
+    console.log(req.otp)
     await transporter.sendMail(mailOptions)
 }
 
