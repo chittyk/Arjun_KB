@@ -59,10 +59,24 @@ verifyOtpAndCreateUser = async (req, res) => {
     });
     await newUser.save();
 
+    //create the token
+    const payload = {
+      userId:newUser._id,
+      email: newUser.email,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE || "7d",
+    });
+
     //remove otp
     await Otp.deleteOne({ email });
     res.status(201).json({
       message: "Account created successfully",
+      token,
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+      },
     });
   } catch (error) {
     console.log(console.error(error));
